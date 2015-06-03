@@ -1,0 +1,16 @@
+scene
+{
+    path = res/box.gpb
+
+    ambientColor = 0.5, 0.5, 0.5
+
+    node cube
+    {
+        material = res/demo.material#lambert2
+    }
+
+    physics
+    {
+        gravity = 0.0, -9.8, 0.0
+    }
+}
