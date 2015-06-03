@@ -483,7 +483,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"../../GamePlay/external-deps/lib/macosx/x86_64",
-					/Users/pasikettunen/Documents/2015/assimp/lib/Debug,
+					../../assimp/lib/Debug,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -511,7 +511,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"../../GamePlay/external-deps/lib/macosx/x86_64",
-					/Users/pasikettunen/Documents/2015/assimp/lib/Debug,
+					../../assimp/lib/Debug,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";

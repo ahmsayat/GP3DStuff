@@ -20,22 +20,22 @@ material colored
 
 material textured
 {
-u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
+    u_worldViewProjectionMatrix = WORLD_VIEW_PROJECTION_MATRIX
 
-technique
-{
-pass
-{
-vertexShader = res/shaders/textured.vert
-fragmentShader = res/shaders/textured.frag
-}
-}
+    technique
+    {
+        pass
+        {
+        vertexShader = res/shaders/textured.vert
+        fragmentShader = res/shaders/textured.frag
+        }
+    }
 
-renderState
-{
-cullFace = true
-depthTest = true
-}
+    renderState
+    {
+    cullFace = true
+    depthTest = true
+    }
 }
 
 
@@ -44,18 +44,18 @@ material crate : textured
     u_ambientColor = 0.5, 0.5, 0.5
 
     u_directionalLightColor[0] = 1, 1, 1
-u_directionalLightDirection[0] = -0.46, -0.374, -0.8
+    u_directionalLightDirection[0] = -0.46, -0.374, -0.8
     u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
 
-sampler u_diffuseTexture
-{
-path = res/png/crate.png
-mipmap = true
-wrapS = CLAMP
-wrapT = CLAMP
-minFilter = NEAREST_MIPMAP_LINEAR
-magFilter = LINEAR
-}
+    sampler u_diffuseTexture
+    {
+    path = res/png/crate.png
+    mipmap = true
+    wrapS = CLAMP
+    wrapT = CLAMP
+    minFilter = NEAREST_MIPMAP_LINEAR
+    magFilter = LINEAR
+    }
 
     technique
     {
@@ -68,110 +68,109 @@ magFilter = LINEAR
 
 material dwarf : textured
 {
-u_ambientColor = 0.5, 0.5, 0.5
+    u_ambientColor = 0.5, 0.5, 0.5
 
-u_directionalLightColor[0] = 1, 1, 1
-u_directionalLightDirection[0] = -0.46, -0.374, -0.8
-u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+    u_directionalLightColor[0] = 1, 1, 1
+    u_directionalLightDirection[0] = -0.46, -0.374, -0.8
+    u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
 
-sampler u_diffuseTexture
-{
-path = res/png/dwarf.png
-mipmap = true
-wrapS = CLAMP
-wrapT = CLAMP
-minFilter = NEAREST_MIPMAP_LINEAR
-magFilter = LINEAR
-}
+    sampler u_diffuseTexture
+    {
+    path = res/png/dwarf.png
+    mipmap = true
+    wrapS = CLAMP
+    wrapT = CLAMP
+    minFilter = NEAREST_MIPMAP_LINEAR
+    magFilter = LINEAR
+    }
 
-technique
-{
-pass
-{
-defines = DIRECTIONAL_LIGHT_COUNT 1
-}
-}
+    technique
+    {
+        pass
+        {
+        defines = DIRECTIONAL_LIGHT_COUNT 1
+        }
+    }
 }
 
 material axe : dwarf
 {
-sampler u_diffuseTexture
-{
-path = res/png/axe.png
-mipmap = true
-wrapS = CLAMP
-wrapT = CLAMP
-minFilter = NEAREST_MIPMAP_LINEAR
-magFilter = LINEAR
-}
+    sampler u_diffuseTexture
+    {
+    path = res/png/axe.png
+    mipmap = true
+    wrapS = CLAMP
+    wrapT = CLAMP
+    minFilter = NEAREST_MIPMAP_LINEAR
+    magFilter = LINEAR
+    }
 }
 
 material coneunlit : textured
 {
-sampler u_diffuseTexture
-{
-path = res/png/cone.png
-mipmap = true
-wrapS = CLAMP
-wrapT = CLAMP
-minFilter = NEAREST_MIPMAP_LINEAR
-magFilter = LINEAR
-}
+    sampler u_diffuseTexture
+    {
+    path = res/png/cone.png
+    mipmap = true
+    wrapS = CLAMP
+    wrapT = CLAMP
+    minFilter = NEAREST_MIPMAP_LINEAR
+    magFilter = LINEAR
+    }
 
 }
 
 material cone : coneunlit
 {
-//u_ambientColor = SCENE_AMBIENT_COLOR
-u_ambientColor = 0.1, 0.1, 0.2
+    //u_ambientColor = SCENE_AMBIENT_COLOR
+    u_ambientColor = 0.1, 0.1, 0.2
 
-u_directionalLightColor[0] = 0.9, 0.9, 0.9
-//1, 1, 1
-u_directionalLightDirection[0] = -0.46, -0.374, -0.8
-u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
+    u_directionalLightColor[0] = 0.9, 0.9, 0.9
+    u_directionalLightDirection[0] = -0.46, -0.374, -0.8
+    u_inverseTransposeWorldViewMatrix = INVERSE_TRANSPOSE_WORLD_VIEW_MATRIX
 
-technique
-{
-pass
-{
-defines = DIRECTIONAL_LIGHT_COUNT 1
-}
-}
+    technique
+    {
+        pass
+        {
+        defines = DIRECTIONAL_LIGHT_COUNT 1
+        }
+    }
 }
 
 material conebump : cone
 {
-technique
-{
-pass
-{
+    technique
+    {
+        pass
+        {
 
-defines = DIRECTIONAL_LIGHT_COUNT 1;BUMPED
+        defines = DIRECTIONAL_LIGHT_COUNT 1;BUMPED
 
-sampler u_normalmapTexture
-{
-path = res/png/cone-bmp_NRM.png
-mipmap = true
-wrapS = CLAMP
-wrapT = CLAMP
-minFilter = NEAREST_MIPMAP_LINEAR
-magFilter = LINEAR
-}
+        sampler u_normalmapTexture
+        {
+        path = res/png/cone-bmp_NRM.png
+        mipmap = true
+        wrapS = CLAMP
+        wrapT = CLAMP
+        minFilter = NEAREST_MIPMAP_LINEAR
+        magFilter = LINEAR
+        }
 
-}
-}
+        }
+    }
 }
 
 material coneshiny : conebump
 {
-u_specularExponent = 100
-u_cameraPosition = CAMERA_VIEW_POSITION
-technique
-{
-pass
-{
-defines = DIRECTIONAL_LIGHT_COUNT 1;SPECULAR;BUMPED
-}
-}
+    u_specularExponent = 100
+    u_cameraPosition = CAMERA_VIEW_POSITION
+    technique
+    {
+        pass
+        {
+        defines = DIRECTIONAL_LIGHT_COUNT 1;SPECULAR;BUMPED
+        }
+    }
 
 }

@@ -13,25 +13,22 @@ AssimpDemo::AssimpDemo()
 void AssimpDemo::initialize()
 {
     // Load game scene from file
-    _scene = Scene::load("res/box.gpb");    // This file is just for the cameralevel
-    //_scene = Scene::create();
+    _scene = Scene::load("res/box.gpb");    // This scene file is just for the cameralevel
     
+    // There is no camera in the scene, so we create one
     Camera* camera = Camera::createPerspective(45, getAspectRatio(), 0.1f, 350.0f);
-    
-    // ---------------------------------------
-    
     Node* _cameraNode = _scene->findNode("cameralevel");
     _cameraNode->setCamera(camera);
     
     _scene->setActiveCamera(camera);
     SAFE_RELEASE(camera);
     
-    Node*oldcn = _scene->findNode("cube");
-    _scene->removeNode(oldcn);
+    Node*oldcn = _scene->findNode("cube");  // We don't need this cube
+    _scene->removeNode(oldcn);              // goodbye cube
 
     // ---------------------------------------
     
-    Assimp::Importer importer;
+    Assimp::Importer importer;  // Interface to assimp importing
     
     const aiScene*ascene = loadAiScene(importer, "res/models/box.obj"); // import obj
     Node*node = createNodeFromAiNode(ascene,
@@ -113,15 +110,46 @@ void AssimpDemo::keyEvent(Keyboard::KeyEvent evt, int key)
 }
 
 /**
+ Loads a 3D object file and creates an Assimp Scene from it
+ */
+const aiScene* AssimpDemo::loadAiScene(Assimp::Importer &importer, const char*path) {
+    const aiScene* ascene = NULL;
+    
+    // Setup path to the resources folder
+    std::string fullPath;
+    if (FileSystem::isAbsolutePath(path)) {
+        fullPath.assign(path);
+    }
+    else {
+        fullPath.assign( FileSystem::getResourcePath());
+        fullPath += path;
+    }
+    
+    importer.SetPropertyFloat("PP_GSN_MAX_SMOOTHING_ANGLE", 60); // I think this doesn't have any effect when the meshes already contain normals
+    
+    // See the Assimp documentation
+    // aiProcess_CalcTangentSpace flag makes possible to use normal mapping effects
+    
+    ascene = importer.ReadFile(fullPath, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_CalcTangentSpace);
+    if (!ascene) {
+        GP_WARN("Failed to open %s", fullPath.c_str());
+    }
+    return ascene;
+}
+
+/**
  * Tries to find aiNode named nodeid in the aiScene and convert it to a GP Node (with Model).
  * If there is no such a node, (some file formats do not even have nodes)
- * loads any meshes there are in the aiScene and packs them to one Model, and Node.
+ *   loads any meshes there are in the aiScene and packs them to one Model, and Node.
+ *
  * If materialProps is present, creates that material and binds to the mesh.
  */
 Node* AssimpDemo::createNodeFromAiNode(const aiScene* ascene, const char*nodeid, const char* materialProps, bool addToScene) {
     Node*node = NULL;
     
     Mesh*mesh = loadAiMesh(ascene, nodeid);
+    
+    // If we got the Mesh, create a Node
     if (mesh) {
         node = Node::create(nodeid);
         Model*model = Model::create(mesh);
@@ -143,39 +171,11 @@ Node* AssimpDemo::createNodeFromAiNode(const aiScene* ascene, const char*nodeid,
         SAFE_RELEASE(model);
         SAFE_RELEASE(mesh);
     }
-    if (addToScene && node) {
+    if (addToScene && node) {   // if addToScene==true, and we have a Node, add it to the _scene
         _scene->addNode(node);
         node->release();
     }
     return node;
-}
-
-/**
- Loads a 3D object file and creates an Assimp Scene from it
- */
-const aiScene* AssimpDemo::loadAiScene(Assimp::Importer &importer, const char*path) {
-    const aiScene* ascene = NULL;
-    
-    // Setup path to the resources folder
-    std::string fullPath;
-    if (FileSystem::isAbsolutePath(path)) {
-        fullPath.assign(path);
-    }
-    else {
-        fullPath.assign( FileSystem::getResourcePath());
-        fullPath += path;
-    }
-
-    importer.SetPropertyFloat("PP_GSN_MAX_SMOOTHING_ANGLE", 60); // I think this doesn't have any effect when the meshes already contain normals
-
-    // See Assimp documentation
-    // aiProcess_CalcTangentSpace flag makes possible to use normal mapping effects
-    
-    ascene = importer.ReadFile(fullPath, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_CalcTangentSpace);
-    if (!ascene) {
-        GP_WARN("Failed to open %s", fullPath.c_str());
-    }
-    return ascene;
 }
 
 /**
